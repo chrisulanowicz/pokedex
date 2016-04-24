@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="description" content="Pokemon Index" />
+        <title>Gotta Catch'em All</title>
+        <link rel="stylesheet" href="style.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+        <script>
+            $(document).ready(function(){
+                console.log('working');
+                var pokemon="";
+                $.get("http://pokeapi.co/api/v2/",function(){
+                    for(var i = 1; i < 152; i++) {
+                        pokemon +=("<img id='"+i+"' src='http://pokeapi.co/media/img/"+i+".png'>");
+                        $('#pokimages').html(pokemon);
+                    }   
+                }, "json");
+            });
+            $(document).on("click", "img", function(){
+                $("#pokedex").html("");
+                var image=event.target.id;
+                $.get("http://pokeapi.co/api/v2/pokemon/"+image, function(pok){
+                    var pokdata="<h3>"+pok.name+"</h3><img src='http://pokeapi.co/media/img/"+image+".png'><h4>Types</h4><ul>";
+                    for(var i=0;i<pok.types.length;i++){
+                            pokdata+="<li>"+pok.types[i].type.name+"</li>";
+                    }
+                    pokdata+="</ul><h4>Height</h4><p>"+pok.height+"</p><h4>Weight</h4><p>"+pok.weight+"</p>";
+                    $("#pokedex").html(pokdata);
+                }, "json");
+            });
+        </script>
+    </head>
+    <body>
+        <div id="container">
+            <div id="pokimages">
+            </div>
+            <div id="pokedex">
+            </div>
+        </div>
+    </body>
+</html>
